@@ -1,0 +1,26 @@
+Champs à afficher sur le doc : 
+	- Numéro AMM
+	- Libellé produit
+	- Cible
+	- Culture
+	- 
+
+
+cultureIdMetier => Correspond à "Orge" (1139)	
+
+
+https://alim.agriculture.gouv.fr/ift-api/api/produits-doses-reference?campagneIdMetier=2018&produitLibelle=CAMIX
+
+
+Numéro AMM (Autorisation de mise sur le marché) -> Correspond au numéro officiel du produit
+https://alim.agriculture.gouv.fr/ift-api/api/numeros-amm/2010356
+
+
+
+
+- Pouvoir rechercher tous les produits d'une culture.
+
+- Stade d'application (Sur fiche Ephy : https://ephy.anses.fr/ppp/carmina-max, https://alim.agriculture.gouv.fr/ift-api/api/produits-doses-reference?campagneIdMetier=2018&produitLibelle=CARMINA%20MAX)
+- Pouvoir sauvegarder une préconisation pour un client et pour une culture.
+
+- Pouvoir connaitre la validité d'un produit (U 46 D)
