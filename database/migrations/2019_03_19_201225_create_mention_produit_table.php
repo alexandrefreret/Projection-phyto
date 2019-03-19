@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProduitsTable extends Migration
+class CreateMentionProduitTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,17 @@ class CreateProduitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('produits', function (Blueprint $table) {
+        Schema::create('mention_produit', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('numero_amm', 255);
-            $table->string('nom', 255);
-            $table->string('titulaire', 255);
-            $table->string('usage_lib_court', 255);
-            $table->string('mentions_autorisees', 255);
-            $table->date('date_decision');
-            $table->integer('type_id')->unsigned();
-            
+            $table->integer('produit_id')->unsigned();
+            $table->integer('mention_id')->unsigned();
+
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 
             //Foreign key
-            $table->foreign('type_id')->references('id')->on('types');
+            $table->foreign('produit_id')->references('id')->on('produits');
+            $table->foreign('mention_id')->references('id')->on('mentions');
         });
     }
 
@@ -38,6 +34,6 @@ class CreateProduitsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('produits');
+        Schema::dropIfExists('mention_produit');
     }
 }
