@@ -21,6 +21,7 @@ Route::get('/prestations', 'HomeController@index')->name('prestations');
 
 Route::get('/product/choose', 'ProductController@choose')->name('choose_product');
 Route::post('/product/list', 'ProductController@list')->name('list_product');
+Route::get('/product/import', 'ProductController@importCsv');
 Route::post('/product/add', 'ProductController@add')->name('add_product');
 Route::get('/step/add', 'StepController@add')->name('add_step');
 Route::post('/step/save', 'StepController@save')->name('save_step');

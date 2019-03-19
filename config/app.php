@@ -162,7 +162,6 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        'Backpack\NewsCRUD\NewsCRUDServiceProvider',
         App\Providers\HelperServiceProvider::class,
 
 

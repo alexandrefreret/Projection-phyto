@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Model\CerealsGroup;
 use \DB;
+use Helper;
 
 class ProductController extends Controller
 {
@@ -80,5 +81,24 @@ class ProductController extends Controller
 			//Pas de campagne en cours
 			abort(404);
 		}
+	}
+
+
+	public function importCsv()
+	{
+	    $file = public_path('produits.csv');
+
+	    $Helper = new Helper();
+
+	    echo '<pre>'; var_dump($file); echo '</pre>';
+
+	    $customerArr = $Helper->csvToArray($file, ';');
+
+	    for ($i = 0; $i < count($customerArr); $i ++)
+	    {
+	        //User::firstOrCreate($customerArr[$i]);
+	    }
+
+	    return 'Jobi done or what ever';    
 	}
 }
