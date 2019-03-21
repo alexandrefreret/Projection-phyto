@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class CerealsGroupTableSeeder extends Seeder
+class CerealsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,8 +12,9 @@ class CerealsGroupTableSeeder extends Seeder
      */
     public function run()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
 
-    	DB::table('cereals_group')->truncate();
+    	DB::table('cereals')->truncate();
 
     	//Je vais appeler l'api
     	$url_api = "https://alim.agriculture.gouv.fr/ift-api/api/cultures";
@@ -24,7 +25,7 @@ class CerealsGroupTableSeeder extends Seeder
     	{
     		foreach ($json as $key => $value) 
     		{
-    			DB::table('cereals_group')->insert([
+    			DB::table('cereals')->insert([
     				"label" => $value["libelle"],
     				"externid" => $value["idMetier"],
     			]);
