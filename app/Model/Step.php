@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Step extends Model
 {
 	//
-	public function cerealsGroup()
+	public function cereals()
 	{
-		return $this->hasOne('App\Model\CerealsGroup');
+		return $this->hasOne('App\Model\Cereal');
 	}
 }

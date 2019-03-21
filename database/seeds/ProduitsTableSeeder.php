@@ -2,6 +2,13 @@
 
 use Illuminate\Database\Seeder;
 
+use \App\Model\Produit;
+use \App\Model\Type;
+use \App\Model\Mention;
+use \App\Model\NomCommercial;
+use \App\Model\Substance;
+use \App\Model\Fonction;
+
 // composer require laracasts/testdummy
 use Laracasts\TestDummy\Factory as TestDummy;
 
@@ -11,18 +18,154 @@ class ProduitsTableSeeder extends Seeder
 	{
 		DB::statement('SET FOREIGN_KEY_CHECKS=0');
 
+		DB::table('types')->truncate();
 		DB::table('produits')->truncate();
+		DB::table('mentions')->truncate();
+		DB::table('mention_produit')->truncate();
+		DB::table('noms_commerciaux')->truncate();
+		DB::table('fonctions')->truncate();
+		DB::table('fonction_produit')->truncate();
+		DB::table('substances')->truncate();
+		DB::table('produit_substance')->truncate();
 
 		$file = public_path('produits.csv');
 
-	    $Helper = new Helper();
+		$Helper = new Helper();
 
-	    $customerArr = $Helper->csvToArray($file, ';');
+		$customerArr = $Helper->csvToArray($file, ';');
 
-	    foreach ($customerArr as $key => $value) 
-	    {
-	    	echo '<pre>'; var_dump($value); echo '</pre>';
-	    	die();
-	    }
+		$all_produits = [];
+		$all_type = [];
+		$all_mentions = [];
+		$all_nom_commerciaux = [];
+		$all_substances_actives = [];
+		$all_fonctions = [];
+
+		foreach ($customerArr as $key => $value) 
+		{
+			if(!in_array($value["type produit"], $all_type))
+			{
+				$type = new Type();
+				$type->label = $value["type produit"];
+				$type->save();
+
+				$all_type[] = $value["type produit"];
+			}
+
+			if(!in_array($value["numero AMM"], $all_produits))
+			{
+				$produit = new Produit();
+				$produit->numero_amm = $value["numero AMM"];
+				$produit->nom = $value["nom produit"];
+				$produit->titulaire = $value["titulaire"];
+				$produit->usage_lib_court = $value["identifiant usage lib court"];
+				$produit->date_decision = $Helper->date2en($value["date decision"]);
+				$produit->type_id = $type->id;
+				$produit->save();
+				
+				$all_produits[] =  $value["numero AMM"];
+			}
+
+			//Je vais traiter les mentions autorisées, explode | puis enregistrement
+			if($value["mentions_autorisees"] != "")
+			{
+				$tab_mentions = explode("|", $value["mentions_autorisees"]);
+				foreach ($tab_mentions as $key_mentions => $mentions) 
+				{
+					$mentions = trim($mentions);
+					if(!in_array($mentions, $all_mentions))
+					{
+						$mention = new Mention();
+						$mention->label = $mentions;
+						$mention->save();
+
+						$all_mentions[] = $mentions;
+
+						$produit->mentions()->attach($mention);
+					}
+					else
+					{
+						// $mention = new Mention();
+						// $bdd_mention = Mention::where('label', '=', $mentions)->first();
+						// $has_mention_produit = Mention::find($bdd_mention->id)->produits()->get();
+						// $has_mention_produit = $mention->produits()->where('produits.id', $produit->id)->exists();
+						
+						
+						// // echo '<pre>'; var_dump($mention_produit); echo '</pre>';
+						// if(!$has_mention_produit)
+						// {
+						// 	$produit->mentions()->attach($bdd_mention);
+						// }
+					}
+				}
+			}
+
+
+			//Je vais traiter les nom commerciaux, explode | puis enregistrement
+			if($value["seconds noms commerciaux"] != "")
+			{
+				$tab_nom_commerciaux = explode("|", $value["seconds noms commerciaux"]);
+				foreach ($tab_nom_commerciaux as $key_nom => $value_nom_commerciaux) 
+				{
+					$value_nom_commerciaux = trim($value_nom_commerciaux);
+					if(!in_array($value_nom_commerciaux, $all_nom_commerciaux))
+					{
+						$nom_commercial = new NomCommercial();
+						$nom_commercial->nom = $value_nom_commerciaux;
+						$nom_commercial->produit_id = $produit->id;
+						$nom_commercial->save();
+
+						$all_nom_commerciaux[] = $value_nom_commerciaux;
+					}
+				}
+			}
+
+			//Je vais traiter les nom commerciaux, explode | puis enregistrement
+			if($value["Substances actives"] != "")
+			{
+				$tab_substances_actives = explode("|", $value["Substances actives"]);
+				foreach ($tab_substances_actives as $key_substance => $value_substance) 
+				{
+					$value_substance = trim($value_substance);
+					if(!in_array($value_substance, $all_substances_actives))
+					{
+						$substance = new Substance();
+						$substance->nom = $value_substance;
+						$substance->save();
+
+						$all_substances_actives[] = $value_substance;
+
+						$produit->substances()->attach($substance);
+					}
+				}
+			}
+
+
+			if($value["fonctions"] != "")
+			{
+				$tab_fonctions = explode("|", $value["fonctions"]);
+				foreach ($tab_fonctions as $key_fonction => $value_fonction) 
+				{
+					$value_fonction = trim($value_fonction);
+					if(!in_array($value_fonction, $all_fonctions))
+					{
+						$fonction = new Fonction();
+						$fonction->nom = $value_fonction;
+						$fonction->save();
+
+						$all_fonctions[] = $value_fonction;
+
+						$produit->fonctions()->attach($fonction);
+					}
+				}
+			}
+
+			//Vérifier car si le truc existe deja dans mon tableau, actuellement je l'insere jamais
+
+			if($key == 156)
+			{
+				die();
+			}
+		}
 	}
 }

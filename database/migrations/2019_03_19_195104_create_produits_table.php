@@ -19,7 +19,6 @@ class CreateProduitsTable extends Migration
             $table->string('nom', 255);
             $table->string('titulaire', 255);
             $table->string('usage_lib_court', 255);
-            $table->string('mentions_autorisees', 255);
             $table->date('date_decision');
             $table->integer('type_id')->unsigned();
             

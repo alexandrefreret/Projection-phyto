@@ -65,4 +65,21 @@ class Helper
 
 	    return $data;
 	}
+
+	function date2fr($date) { 
+		$split = explode("-",$date); 
+		$annee = $split[0]; 
+		$mois = $split[1]; 
+		$jour = $split[2]; 
+		return $jour . "-" . $mois . "-" . $annee; 
+	}
+	 
+	// Fonction pour changer la date FR vers US
+	function date2en($date) { 
+		$split = explode("/",$date); 
+		$annee = $split[2]; 
+		$mois = $split[1]; 
+		$jour = $split[0]; 
+		return $annee . "-". $mois . "-" . $jour; 
+	} 
 }
