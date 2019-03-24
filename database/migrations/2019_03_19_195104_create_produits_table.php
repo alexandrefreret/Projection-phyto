@@ -19,7 +19,7 @@ class CreateProduitsTable extends Migration
             $table->string('nom', 255);
             $table->string('titulaire', 255);
             $table->string('usage_lib_court', 255);
-            $table->date('date_decision');
+            $table->date('date_decision')->nullable();
             $table->integer('type_id')->unsigned();
             
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));

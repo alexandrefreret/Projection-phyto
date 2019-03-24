@@ -59,7 +59,12 @@ class ProduitsTableSeeder extends Seeder
 				$produit->nom = $value["nom produit"];
 				$produit->titulaire = $value["titulaire"];
 				$produit->usage_lib_court = $value["identifiant usage lib court"];
-				$produit->date_decision = $Helper->date2en($value["date decision"]);
+
+				$produit->date_decision = null;
+				if($value["date decision"] != '')
+				{
+					$produit->date_decision = $Helper->date2en($value["date decision"]);
+				}
 				$produit->type_id = $type->id;
 				$produit->save();
 				
@@ -85,17 +90,13 @@ class ProduitsTableSeeder extends Seeder
 					}
 					else
 					{
-						// $mention = new Mention();
-						// $bdd_mention = Mention::where('label', '=', $mentions)->first();
-						// $has_mention_produit = Mention::find($bdd_mention->id)->produits()->get();
-						// $has_mention_produit = $mention->produits()->where('produits.id', $produit->id)->exists();
+						$bdd_mention = Mention::where('label', '=', $mentions)->first();
+						$has_mention_produit = Mention::find($bdd_mention->id)->produits()->where('produits.id', '=', $produit->id)->get();
 						
-						
-						// // echo '<pre>'; var_dump($mention_produit); echo '</pre>';
-						// if(!$has_mention_produit)
-						// {
-						// 	$produit->mentions()->attach($bdd_mention);
-						// }
+						if($has_mention_produit->count() == 0)
+						{
+							$produit->mentions()->attach($bdd_mention);
+						}
 					}
 				}
 			}
@@ -117,6 +118,26 @@ class ProduitsTableSeeder extends Seeder
 
 						$all_nom_commerciaux[] = $value_nom_commerciaux;
 					}
+					else
+					{
+						$nom_commercial = new NomCommercial();
+						// $has_noms_produit = $produit->noms_commerciaux()->where('produit_id', $produit->id)->where('nom', $value_nom_commerciaux)->get();
+						$has_noms_produit = $produit->noms_commerciaux()->where([
+							['produit_id', $produit->id],
+							['noms_commerciaux.nom', $value_nom_commerciaux],
+						])->get();
+
+
+						
+						if($has_noms_produit->count() == 0)
+						{
+							$nom_commercial->nom = $value_nom_commerciaux;
+							$nom_commercial->produit_id = $produit->id;
+							$nom_commercial->save();
+
+							$all_nom_commerciaux[] = $value_nom_commerciaux;
+						}
+					}
 				}
 			}
 
@@ -136,6 +157,16 @@ class ProduitsTableSeeder extends Seeder
 						$all_substances_actives[] = $value_substance;
 
 						$produit->substances()->attach($substance);
+					}
+					else
+					{
+						$bdd_substances = Substance::where('nom', '=', $value_substance)->first();
+						$has_substances_produit = Substance::find($bdd_substances->id)->produits()->where('produits.id', '=', $produit->id)->get();
+						
+						if($has_substances_produit->count() == 0)
+						{
+							$produit->substances()->attach($bdd_substances);
+						}
 					}
 				}
 			}
@@ -157,14 +188,17 @@ class ProduitsTableSeeder extends Seeder
 
 						$produit->fonctions()->attach($fonction);
 					}
+					else
+					{
+						$bdd_fonctions = Fonction::where('nom', '=', $value_fonction)->first();
+						$has_fonctions_produit = Fonction::find($bdd_fonctions->id)->produits()->where('produits.id', '=', $produit->id)->get();
+						
+						if($has_fonctions_produit->count() == 0)
+						{
+							$produit->fonctions()->attach($bdd_fonctions);
+						}
+					}
 				}
-			}
-
-			//Vérifier car si le truc existe deja dans mon tableau, actuellement je l'insere jamais
-
-			if($key == 156)
-			{
-				die();
 			}
 		}
 	}

@@ -10,6 +10,6 @@ class NomCommercial extends Model
 	//
 	public function produits()
 	{
-		return $this->hasMany('App\Model\Produit');
+		return $this->belongsTo('App\Model\Produit');
 	}
 }
