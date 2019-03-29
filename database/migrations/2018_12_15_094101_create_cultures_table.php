@@ -3,11 +3,11 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateCerealsTable extends Migration {
+class CreateCulturesTable extends Migration {
 
 	public function up()
 	{
-		Schema::create('cereals', function(Blueprint $table) {
+		Schema::create('cultures', function(Blueprint $table) {
 			$table->increments('id');
 			$table->string('label', 255);
 			$table->string('externid');
@@ -19,6 +19,6 @@ class CreateCerealsTable extends Migration {
 
 	public function down()
 	{
-		Schema::drop('cereals');
+		Schema::drop('cultures');
 	}
 }

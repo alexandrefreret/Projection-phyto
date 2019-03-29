@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProduitsTable extends Migration
+class CreateUsagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,12 @@ class CreateProduitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('produits', function (Blueprint $table) {
+        Schema::create('usages', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('numero_amm', 255);
-            $table->string('nom', 255);
-            $table->string('titulaire', 255);
-            $table->date('date_decision')->nullable();
-            $table->integer('type_id')->unsigned();
-            
+            $table->longText('label');
+
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-
-            //Foreign key
-            $table->foreign('type_id')->references('id')->on('types');
         });
     }
 
@@ -36,6 +29,6 @@ class CreateProduitsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('produits');
+        Schema::dropIfExists('usages');
     }
 }

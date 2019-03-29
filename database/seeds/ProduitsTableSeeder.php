@@ -8,6 +8,8 @@ use \App\Model\Mention;
 use \App\Model\NomCommercial;
 use \App\Model\Substance;
 use \App\Model\Fonction;
+use \App\Model\Usage;
+use \App\Model\Culture;
 
 // composer require laracasts/testdummy
 use Laracasts\TestDummy\Factory as TestDummy;
@@ -27,6 +29,9 @@ class ProduitsTableSeeder extends Seeder
 		DB::table('fonction_produit')->truncate();
 		DB::table('substances')->truncate();
 		DB::table('produit_substance')->truncate();
+		DB::table('culture_produit')->truncate();
+		DB::table('usages')->truncate();
+		DB::table('produit_usage')->truncate();
 
 		$file = public_path('produits.csv');
 
@@ -36,6 +41,7 @@ class ProduitsTableSeeder extends Seeder
 
 		$all_produits = [];
 		$all_type = [];
+		$all_usages = [];
 		$all_mentions = [];
 		$all_nom_commerciaux = [];
 		$all_substances_actives = [];
@@ -58,7 +64,6 @@ class ProduitsTableSeeder extends Seeder
 				$produit->numero_amm = $value["numero AMM"];
 				$produit->nom = $value["nom produit"];
 				$produit->titulaire = $value["titulaire"];
-				$produit->usage_lib_court = $value["identifiant usage lib court"];
 
 				$produit->date_decision = null;
 				if($value["date decision"] != '')
@@ -96,6 +101,52 @@ class ProduitsTableSeeder extends Seeder
 						if($has_mention_produit->count() == 0)
 						{
 							$produit->mentions()->attach($bdd_mention);
+						}
+					}
+				}
+			}
+
+
+			if($value["identifiant usage"] != "")
+			{
+				$tab_usages = explode("*", $value["identifiant usage"]);
+				
+				foreach ($tab_usages as $key_usages => $usages) 
+				{
+					$usages = trim($usages);
+
+					//Je regarde j'ai une culture de renseignée
+					if($key_usages == 0)
+					{
+
+						$bdd_culture = Culture::where('label', '=', $usages)->first();
+						if(!is_null($bdd_culture))
+						{
+							$produit->cultures()->attach($bdd_culture);
+							$culture_produit_id =  $produit->cultures()->where('produit_id', '=', $produit->id)->where('culture_id', '=', $bdd_culture->id)->first()->pivot->id;
+							continue;
+						}
+					}
+
+
+					if(!in_array($usages, $all_usages))
+					{
+						$usage = new Usage();
+						$usage->label = $usages;
+						$usage->save();
+
+						$all_usages[] = $usages;
+
+						$produit->usages()->attach($usage);
+					}
+					else
+					{
+						$bdd_usage = Usage::where('label', '=', $usages)->first();
+						$has_usage_produit = Usage::find($bdd_usage->id)->produits()->where('produits.id', '=', $produit->id)->get();
+						
+						if($has_usage_produit->count() == 0)
+						{
+							$produit->usages()->attach($bdd_usage);
 						}
 					}
 				}

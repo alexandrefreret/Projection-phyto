@@ -10,13 +10,13 @@ class CreateStepsTable extends Migration {
 		Schema::create('steps', function(Blueprint $table) {
 			$table->increments('id');
 			$table->string('label', 255);
-			$table->integer('cereal_id')->unsigned();
+			$table->integer('culture_id')->unsigned();
 			$table->integer('step');
 
 			$table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
 			$table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 
-			$table->foreign('cereal_id')->references('id')->on('cereals');
+			$table->foreign('culture_id')->references('id')->on('cultures');
 		});
 	}
 

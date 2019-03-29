@@ -15,9 +15,11 @@ class CreateCultureProduitStepTable extends Migration
     {
         Schema::create('culture_produit_step', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('produit_id')->unsigned();
+            
             $table->integer('produit_step_id')->unsigned();
-            $table->integer('cereal_id')->unsigned();
+            $table->integer('culture_produit_id')->unsigned();
+
+            
             
             $table->integer('delai')->default(0);
             $table->decimal('dose', 8, 2);
@@ -35,9 +37,8 @@ class CreateCultureProduitStepTable extends Migration
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 
-            $table->foreign('produit_id')->references('id')->on('produits');
+            $table->foreign('culture_produit_id')->references('id')->on('culture_produit');
             $table->foreign('produit_step_id')->references('id')->on('produit_step');
-            $table->foreign('cereal_id')->references('id')->on('cereals');
         });
     }
 
