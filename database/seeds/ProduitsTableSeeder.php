@@ -32,6 +32,8 @@ class ProduitsTableSeeder extends Seeder
 		DB::table('culture_produit')->truncate();
 		DB::table('usages')->truncate();
 		DB::table('produit_usage')->truncate();
+		DB::table('culture_produit_step')->truncate();
+		DB::table('produit_step')->truncate();
 
 		$file = public_path('produits.csv');
 
