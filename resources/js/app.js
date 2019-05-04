@@ -5,9 +5,21 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('jquery');
-require('./bootstrap');
 
-$(document).ready(function() {
-	$('select[multiple]').select2();
+
+
+// require('./bootstrap');
+window.Vue = require('vue');
+var VueResource = require('vue-resource');
+import lodash from 'lodash'
+Vue.prototype._ = lodash
+
+Vue.use(VueResource);
+// Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').content;
+
+
+Vue.component('app', require('./components/App.vue'));
+
+const app = new Vue({
+    el: '#app'
 });

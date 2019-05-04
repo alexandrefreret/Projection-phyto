@@ -26,3 +26,16 @@ Route::post('/product/add', 'ProductController@add')->name('add_product');
 Route::get('/step/add', 'StepController@add')->name('add_step');
 Route::post('/step/save', 'StepController@save')->name('save_step');
 // Route::view('/step/add', 'step.add')->name('add_step');
+
+Route::get('/projection', 'ProjectionController@index')->name('projection');
+
+// Route::middleware(['CacheResponse:10'])->group(function () {
+	Route::get('/api/cultures', 'CultureController@all');
+	Route::get('/api/fonctions', 'FonctionController@all');
+	Route::get('/api/substances', 'SubstanceController@all');
+	Route::get('/api/usages', 'UsageController@all');
+	Route::get('/api/combinaisons', 'ProductController@combinaisons');
+// });
+//ResponseCache::clear();
+// Forget one URI
+//ResponseCache::forget('/some-uri');

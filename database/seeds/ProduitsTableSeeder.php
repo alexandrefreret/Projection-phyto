@@ -120,13 +120,22 @@ class ProduitsTableSeeder extends Seeder
 					//Je regarde j'ai une culture de renseignée
 					if($key_usages == 0)
 					{
-
 						$bdd_culture = Culture::where('label', '=', $usages)->first();
 						if(!is_null($bdd_culture))
 						{
-							$produit->cultures()->attach($bdd_culture);
+							$has_culture_produit = Culture::find($bdd_culture->id)->produits()->where('produits.id', '=', $produit->id)->get();
+							
+							if($has_culture_produit->count() == 0)
+							{
+								$produit->cultures()->attach($bdd_culture);
+							}
+
 							$culture_produit_id =  $produit->cultures()->where('produit_id', '=', $produit->id)->where('culture_id', '=', $bdd_culture->id)->first()->pivot->id;
-							continue;
+							$all_usages[] = $usages;
+						}
+						else
+						{
+							echo '<pre>'; var_dump("pas trouvé : " . $usages); echo '</pre>';
 						}
 					}
 
@@ -141,15 +150,19 @@ class ProduitsTableSeeder extends Seeder
 
 						$produit->usages()->attach($usage);
 					}
-					else
+					elseif($usages != "null")
 					{
 						$bdd_usage = Usage::where('label', '=', $usages)->first();
-						$has_usage_produit = Usage::find($bdd_usage->id)->produits()->where('produits.id', '=', $produit->id)->get();
-						
-						if($has_usage_produit->count() == 0)
+						if(isset($bdd_usage->id))
 						{
-							$produit->usages()->attach($bdd_usage);
+							$has_usage_produit = Usage::find($bdd_usage->id)->produits()->where('produits.id', '=', $produit->id)->get();
+							
+							if($has_usage_produit->count() == 0)
+							{
+								$produit->usages()->attach($bdd_usage);
+							}
 						}
+						
 					}
 				}
 			}
@@ -252,6 +265,11 @@ class ProduitsTableSeeder extends Seeder
 						}
 					}
 				}
+			}
+
+			if($key == 100)
+			{
+				die();
 			}
 		}
 	}

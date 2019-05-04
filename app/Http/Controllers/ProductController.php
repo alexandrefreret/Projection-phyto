@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use \DB;
+use \App\Model\Produit;
 use \App\Model\Culture;
+use \App\Model\Usage;
 use Helper;
 
 class ProductController extends Controller
@@ -19,6 +21,64 @@ class ProductController extends Controller
 		
 		return view('product.choose', compact('all_groups', $all_groups));
 	}
+
+
+	public function combinaisons()
+	{
+		$tab_usages = [];
+		$tab_cultures = [];
+		$tab_fonctions = [];
+
+		$Mproduits = new Produit();
+		$produits_usages = Produit::with('usages')->get();
+		if(!empty($produits_usages))
+		{
+			foreach ($produits_usages as $key => $value) {
+				foreach ($value->usages as $k => $val) {
+					$tab_usages[$val->label][] = array(
+						"id" => $value->id,
+						"label" => $value->nom,
+						"value" => $value->nom,
+					);
+				}
+			}
+		}
+
+		$produits_cultures = Produit::with('cultures')->get();
+		if(!empty($produits_cultures))
+		{
+			foreach ($produits_cultures as $key => $value) {
+				foreach ($value->cultures as $k => $val) {
+					$tab_cultures[$val->label][] = array(
+						"id" => $value->id,
+						"label" => $value->nom,
+						"value" => $value->nom,
+					);
+				}
+			}
+		}
+
+		$produits_fonctions = Produit::with('fonctions')->get();
+		if(!empty($produits_fonctions))
+		{
+			foreach ($produits_fonctions as $key => $value) {
+				foreach ($value->fonctions as $k => $val) {
+					$tab_fonctions[$val->nom][] = array(
+						"id" => $value->id,
+						"label" => $value->nom,
+						"value" => $value->nom,
+					);
+				}
+			}
+		}
+
+		return response()->json([
+			'usages' => $tab_usages,
+			'fonctions' => $tab_fonctions,
+			'cultures' => $tab_cultures,
+		]);
+	}
+
 
 	public function list(Request $request)
 	{

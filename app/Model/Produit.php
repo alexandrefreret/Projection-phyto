@@ -35,6 +35,7 @@ class Produit extends Model
 
 	public function cultures()
 	{
-		return $this->belongsToMany('App\Model\Culture')->withPivot('id');
+		return $this->belongsToMany('App\Model\Culture');
+		// return $this->belongsToMany('App\Model\Culture')->withPivot('id');
 	}
 }
