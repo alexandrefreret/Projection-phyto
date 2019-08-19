@@ -10,6 +10,7 @@ use \App\Model\Substance;
 use \App\Model\Fonction;
 use \App\Model\Usage;
 use \App\Model\Culture;
+use \App\Model\Step;
 
 // composer require laracasts/testdummy
 use Laracasts\TestDummy\Factory as TestDummy;
@@ -269,17 +270,54 @@ class ProduitsTableSeeder extends Seeder
 			}
 
 
-			if($value["stade cultural min"] != "" || $value["stade cultural max"] != "")
+			//Je vais créer un tableau avec toutes variables combinées car je dois distinguer les produits
+			$str = $value["numero AMM"] . ";" . $value["stade cultural min"] . ";" . $value["stade cultural max"] . ";" . $value["etat usage"] . ";" . $value["dose retenue"] . ";" . $value["dose retenue unite"] . ";" . $value["delai avant recolte jour"] . ";" . $value["delai avant recolte bbch"] . ";" . $value["nombre max d'application"] . ";" . $value["date fin distribution"] . ";" . $value["date fin utilisation"] . ";" . $value["condition emploi"] . ";" . $value["ZNT aquatique (en m)"] . ";" . $value["ZNT arthropodes non cibles (en m)"] . ";" . $value["ZNT plantes non cibles (en m)"];
+
+			if(!in_array($str, $all_steps))
 			{
 
-				if(!in_array($value_fonction, $all_steps))
-				{
+				$all_steps[] = $str;
 
+				$step = DB::select( DB::raw("SELECT *
+				          FROM produit_step 
+				          WHERE produit_id = '". $produit->id ."'"));
+				if(empty($step))
+				{
+					if($value["stade cultural min"] == "")
+					{
+						 $value["stade cultural min"] = 0;
+					}
+					if($value["stade cultural max"] == "")
+					{
+						 $value["stade cultural max"] = 0;
+					}
+					DB::insert( 'INSERT INTO produit_step (produit_id, step_min, step_max) VALUES (?,?,?)', [$produit->id, $value["stade cultural min"], $value['stade cultural max']] );
+					$produit_step_id = DB::getPdo()->lastInsertId();
 				}
 
+				$date_distrib = explode("/", $value["date fin distribution"]);
+				$date_distrib = $date_distrib[2] . "-" . $date_distrib[1] . "-" . $date_distrib[0];
+
+				$date_utilisation = explode("/", $value["date fin utilisation"]);
+				$date_utilisation = $date_utilisation[2] . "-" . $date_utilisation[1] . "-" . $date_utilisation[0];
+				
+				DB::table('culture_produit_step')->insert([
+					'produit_step_id' => $produit_step_id,
+					'delai' => $value["delai avant recolte jour"],
+					'delai_bbch' => $value["delai avant recolte bbch"],
+					'dose' => $value["dose retenue"],
+					'dose_unite' => $value["dose retenue unite"],
+					'nb_application_max' => $value["nombre max d'application"],
+					'etat' => $value["etat usage"],
+					'date_fin_distribution' => $date_distrib,
+					'date_fin_utilisation' => $date_utilisation,
+					'condition_emploi' => $value["condition emploi"],
+					'znt_aquatique' => $value["ZNT aquatique (en m)"],
+					'znt_arthropodes' => $value["ZNT arthropodes non cibles (en m)"],
+					'znt_plantes' => $value["ZNT plantes non cibles (en m)"],
+				]);
+
 			}
-
-
 
 			if($key == 100)
 			{

@@ -22,6 +22,7 @@ class CreateCultureProduitStepTable extends Migration
             
             
             $table->integer('delai')->default(0);
+            $table->integer('delai_bbch')->default(0);
             $table->decimal('dose', 8, 2);
             $table->string('dose_unite', 20);
             $table->integer('nb_application_max')->nullable()->default(null);
