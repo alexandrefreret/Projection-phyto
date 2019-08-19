@@ -24,3 +24,9 @@ https://alim.agriculture.gouv.fr/ift-api/api/numeros-amm/2010356
 - Pouvoir sauvegarder une préconisation pour un client et pour une culture.
 
 - Pouvoir connaitre la validité d'un produit (U 46 D)
+
+
+
+
+------ A CORRIGER -------
+Substances en double : tetraconazole (Tetraconazole) 100.0 g/L

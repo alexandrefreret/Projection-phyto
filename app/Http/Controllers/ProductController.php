@@ -72,10 +72,25 @@ class ProductController extends Controller
 			}
 		}
 
+		$produits_substances = Produit::with('substances')->get();
+		if(!empty($produits_substances))
+		{
+			foreach ($produits_substances as $key => $value) {
+				foreach ($value->substances as $k => $val) {
+					$tab_substances[$val->nom][] = array(
+						"id" => $value->id,
+						"label" => $value->nom,
+						"value" => $value->nom,
+					);
+				}
+			}
+		}
+
 		return response()->json([
 			'usages' => $tab_usages,
 			'fonctions' => $tab_fonctions,
 			'cultures' => $tab_cultures,
+			'substances' => $tab_substances,
 		]);
 	}
 

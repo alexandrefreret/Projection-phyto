@@ -48,6 +48,7 @@ class ProduitsTableSeeder extends Seeder
 		$all_nom_commerciaux = [];
 		$all_substances_actives = [];
 		$all_fonctions = [];
+		$all_steps = [];
 
 		foreach ($customerArr as $key => $value) 
 		{
@@ -266,6 +267,19 @@ class ProduitsTableSeeder extends Seeder
 					}
 				}
 			}
+
+
+			if($value["stade cultural min"] != "" || $value["stade cultural max"] != "")
+			{
+
+				if(!in_array($value_fonction, $all_steps))
+				{
+
+				}
+
+			}
+
+
 
 			if($key == 100)
 			{

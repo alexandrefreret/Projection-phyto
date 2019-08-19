@@ -17,7 +17,6 @@
 		</div>
 		
 		<DefaultSelect :lists="produits" label="produits" name="produits" v-model="fifthOption"></DefaultSelect>
-		<!-- <DefaultSelect :lists="produits" label="Produits" name="produits" v-model="secondOption" :parent="firstOption"></DefaultSelect> -->
 
 	</div>
 </template>
@@ -85,17 +84,20 @@
 				let produits_cultures = this.tmp_produits_cultures;
 
 				let produits_fonctions = this.combinaisons['fonctions'][val];
+				this.thirdOption = '---';
 				
 				this.produits = this._.intersectionBy(produits_cultures,produits_fonctions, 'label');
-				console.log(this.produits);
+			},
+			thirdOption: function(val){
+				let produits_cultures = this.tmp_produits_cultures;
 
+				let produits_substances = this.combinaisons['substances'][val];
+				
+				this.produits = this._.intersectionBy(produits_cultures,produits_substances, 'label');
 			}
 		},
 		methods: {
-			intersection: function(a, b) {
-
-				return result;
-			}
+			
 		}
 
 	}
