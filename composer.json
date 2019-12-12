@@ -16,8 +16,7 @@
         "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
-        "laravelcollective/html": "^5.4.0",
-        "spatie/laravel-responsecache": "^4.4"
+        "laravelcollective/html": "^5.4.0"
     },
     "require-dev": {
         "backpack/generators": "^1.2",
