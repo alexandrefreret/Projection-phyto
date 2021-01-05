@@ -21,7 +21,7 @@
     },
     "dependencies": {
         "@alfsnd/vue-bootstrap-select": "^0.4.1",
-        "axios": "^0.18.0",
+        "axios": "^0.21.1",
         "vue-lodash": "^2.0.2",
         "vue-resource": "^1.5.1",
         "vue-underscore": "^0.1.4"
